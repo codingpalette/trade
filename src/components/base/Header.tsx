@@ -63,7 +63,7 @@ export default function Header() {
                     <span>Theme</span>
                     <DropdownMenuShortcut>
                       <Select value={theme} onValueChange={onChangeTheme}>
-                        <SelectTrigger className="w-[100px]">
+                        <SelectTrigger className="w-[120px]">
                           <SelectValue placeholder={theme} />
                         </SelectTrigger>
                         <SelectContent>
