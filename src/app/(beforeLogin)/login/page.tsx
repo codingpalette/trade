@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+// import supabase from "@/utils/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -25,6 +27,8 @@ const formSchema = z.object({
 });
 
 export default function LoginPage() {
+  const supabase = createClientComponentClient();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,10 +38,18 @@ export default function LoginPage() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: values.email,
+      options: {
+        // set this to false if you do not want the user to be automatically signed up
+        // shouldCreateUser: false,
+        emailRedirectTo: "http://localhost:3000/auth/callback",
+      },
+    });
   }
 
   return (

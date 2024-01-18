@@ -29,7 +29,7 @@ export default function Header() {
   const router = useRouter();
   const { setTheme, theme } = useTheme();
 
-  const isUser = true;
+  const isUser = false;
 
   // 테마 변경 이벤트
   function onChangeTheme(value: string) {
@@ -103,8 +103,9 @@ export default function Header() {
           </>
         ) : (
           <div className="flex gap-2">
-            <Button>로그인</Button>
-            <Button>회원가입</Button>
+            <Link href="/login">
+              <Button>로그인</Button>
+            </Link>
           </div>
         )}
       </header>
