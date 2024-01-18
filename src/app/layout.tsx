@@ -5,6 +5,7 @@ import { GeistSans } from 'geist/font';
 
 import { cn } from '@/lib/utils'
 import { ThemeProvider } from '@/components/wrapper/ThemeProvider'
+import MainLayoutWrapper from '@/components/wrapper/MainLayoutWrapper';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -24,11 +25,13 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <MainLayoutWrapper>
+            {children}
+          </MainLayoutWrapper>
         </ThemeProvider>
       </body>
     </html>
