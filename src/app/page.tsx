@@ -1,8 +1,8 @@
-"use client";
+// "use client";
 
 // import supabase from "@/utils/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 import {
   Form,
@@ -18,6 +18,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
+
+import ContentBox from "@/components/base/ContentBox";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -38,50 +48,71 @@ const formSchema = z.object({
 export default function Home() {
   const supabase = createClientComponentClient();
 
-  async function load() {
-    const { data } = await supabase.from("page").select("*");
-    console.log("data", data);
-  }
+  // async function load() {
+  //   const { data } = await supabase.from("page").select("*");
+  //   console.log("data", data);
+  // }
 
-  useEffect(() => {
-    load();
-  }, []);
+  // useEffect(() => {
+  //   load();
+  // }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      body: "",
-    },
-  });
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     title: "",
+  //     body: "",
+  //   },
+  // });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    try {
-      const res = await supabase.from("page").insert([
-        {
-          title: values.title,
-          body: values.body,
-        },
-      ]);
-      console.log("res", res);
-      await load();
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   // Do something with the form values.
+  //   // ✅ This will be type-safe and validated.
+  //   console.log(values);
+  //   try {
+  //     const res = await supabase.from("page").insert([
+  //       {
+  //         title: values.title,
+  //         body: values.body,
+  //       },
+  //     ]);
+  //     console.log("res", res);
+  //     await load();
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // }
 
-  async function logOut() {
-    const { error } = await supabase.auth.signOut();
-    console.log("error", error);
-  }
+  // async function logOut() {
+  //   const { error } = await supabase.auth.signOut();
+  //   console.log("error", error);
+  // }
 
   return (
     <>
-      <div>2222</div>
+      <ContentBox>
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle>Create project</CardTitle>
+            <CardDescription>
+              Deploy your new project in one-click.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="relative aspect-video w-full">
+              <img
+                src="/images/image1.jpg"
+                className="absolute left-0 top-0 h-full w-full object-cover"
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <Button>상세보기</Button>
+          </CardFooter>
+        </Card>
+      </ContentBox>
+      {/* <div>2222</div>
 
       <Form {...form}>
         <form
@@ -127,7 +158,7 @@ export default function Home() {
       </div>
       <div>
         <Button onClick={logOut}>로그아웃</Button>
-      </div>
+      </div> */}
     </>
   );
 }
