@@ -78,12 +78,15 @@ export default function Header({ session }: HeaderProps) {
                       <User className="h-4 w-4" />
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <span>상품 등록</span>
-                    <DropdownMenuShortcut>
-                      <ShoppingBasket className="h-4 w-4" />
-                    </DropdownMenuShortcut>
-                  </DropdownMenuItem>
+                  <Link href="/write">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <span>상품 등록</span>
+                      <DropdownMenuShortcut>
+                        <ShoppingBasket className="h-4 w-4" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Link>
+
                   <DropdownMenuItem>
                     {/* <Sun className="mr-2 h-4 w-4" /> */}
                     <span>Theme</span>

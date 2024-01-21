@@ -1,6 +1,7 @@
 import Header from "../base/Header";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import ContentBox from "../base/ContentBox";
 
 export default async function MainLayoutWrapper({
   children,
@@ -18,7 +19,7 @@ export default async function MainLayoutWrapper({
   return (
     <>
       <Header session={session} />
-      {children}
+      <ContentBox>{children}</ContentBox>
     </>
   );
 }

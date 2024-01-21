@@ -91,33 +91,31 @@ export default function Home() {
 
   return (
     <>
-      <ContentBox>
-        <div className="my-4 flex gap-4">
-          <Input placeholder="검색어를 입력해 주세요..." />
-          <Button>검색</Button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-          <Card className="">
-            <CardHeader>
-              <CardTitle>Create project</CardTitle>
-              <CardDescription>
-                Deploy your new project in one-click.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="relative aspect-video w-full">
-                <img
-                  src="/images/image1.jpg"
-                  className="absolute left-0 top-0 h-full w-full object-cover"
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button>상세보기</Button>
-            </CardFooter>
-          </Card>
-        </div>
-      </ContentBox>
+      <div className="my-4 flex gap-4">
+        <Input placeholder="검색어를 입력해 주세요..." />
+        <Button>검색</Button>
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
+        <Card className="">
+          <CardHeader>
+            <CardTitle>Create project</CardTitle>
+            <CardDescription>
+              Deploy your new project in one-click.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="relative aspect-video w-full">
+              <img
+                src="/images/image1.jpg"
+                className="absolute left-0 top-0 h-full w-full object-cover"
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <Button>상세보기</Button>
+          </CardFooter>
+        </Card>
+      </div>
       {/* <div>2222</div>
 
       <Form {...form}>
