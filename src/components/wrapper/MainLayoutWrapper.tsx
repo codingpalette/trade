@@ -13,7 +13,7 @@ export default async function MainLayoutWrapper({
     data: { session },
   } = await supabase.auth.getSession();
 
-  // console.log("session", session);
+  console.log("session", session);
 
   return (
     <>

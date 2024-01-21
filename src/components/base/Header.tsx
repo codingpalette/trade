@@ -3,7 +3,15 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu, Monitor, Moon, Sun, User } from "lucide-react";
+import {
+  LogOut,
+  Menu,
+  Monitor,
+  Moon,
+  ShoppingBasket,
+  Sun,
+  User,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,13 +69,19 @@ export default function Header({ session }: HeaderProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{session.user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <span>Profile</span>
+                    <span>프로필</span>
                     <DropdownMenuShortcut>
                       <User className="h-4 w-4" />
+                    </DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>상품 등록</span>
+                    <DropdownMenuShortcut>
+                      <ShoppingBasket className="h-4 w-4" />
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
@@ -106,7 +120,7 @@ export default function Header({ session }: HeaderProps) {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logOut} className="cursor-pointer">
-                  <span>Log out</span>
+                  <span>로그아웃</span>
                   <DropdownMenuShortcut>
                     <LogOut className="mr-2 h-4 w-4" />
                   </DropdownMenuShortcut>
