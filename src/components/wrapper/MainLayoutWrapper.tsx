@@ -1,15 +1,24 @@
 import Header from "../base/Header";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
+export default async function MainLayoutWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = createServerComponentClient({ cookies });
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-
-export default function MainLayoutWrapper({ children }: { children: React.ReactNode }) {
+  // console.log("session", session);
 
   return (
     <>
-      <Header />
+      <Header session={session} />
       {children}
     </>
-
-  )
+  );
 }

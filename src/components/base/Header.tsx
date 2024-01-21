@@ -24,23 +24,35 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTheme } from "next-themes";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function Header() {
+interface HeaderProps {
+  session: any;
+}
+
+export default function Header({ session }: HeaderProps) {
+  const supabase = createClientComponentClient();
   const router = useRouter();
   const { setTheme, theme } = useTheme();
-
-  const isUser = false;
 
   // 테마 변경 이벤트
   function onChangeTheme(value: string) {
     setTheme(value);
   }
 
+  async function logOut() {
+    try {
+      const { error } = await supabase.auth.signOut();
+    } catch (e) {
+      console.log("e", e);
+    }
+  }
+
   return (
     <>
       <header className="flex w-full items-center justify-between border px-4 py-2 shadow-sm">
         <Link href="/">Home</Link>
-        {isUser ? (
+        {session ? (
           <>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -93,10 +105,11 @@ export default function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
+                <DropdownMenuItem onClick={logOut} className="cursor-pointer">
                   <span>Log out</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  <DropdownMenuShortcut>
+                    <LogOut className="mr-2 h-4 w-4" />
+                  </DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
