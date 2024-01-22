@@ -47,7 +47,7 @@ export default function LoginPage() {
       options: {
         // set this to false if you do not want the user to be automatically signed up
         // shouldCreateUser: false,
-        emailRedirectTo: "http://localhost:3000/auth/callback",
+        emailRedirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_TO,
       },
     });
   }

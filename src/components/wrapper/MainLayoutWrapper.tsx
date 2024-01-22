@@ -14,8 +14,6 @@ export default async function MainLayoutWrapper({
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log("session", session);
-
   return (
     <>
       <Header session={session} />
