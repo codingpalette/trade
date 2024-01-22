@@ -53,6 +53,7 @@ export default function WritePage() {
 
   async function imageChange(file: React.ChangeEvent<HTMLInputElement>) {
     console.log("file", file.target.files);
+
     if (file.target.files && file.target.files.length > 0) {
       const selectedFile: File = file.target.files[0];
       const formData = new FormData();
