@@ -55,6 +55,7 @@ export default function LoginPage() {
   return (
     // 화면 중앙에 오고 폭이 1/2
     <div className="mx-auto mt-24 w-full max-w-[780px] px-4">
+      <div>{process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_TO}</div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
