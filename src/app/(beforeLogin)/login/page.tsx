@@ -17,6 +17,8 @@ import * as z from "zod";
 // import supabase from "@/utils/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -30,6 +32,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const supabase = createClientComponentClient();
   const { toast } = useToast();
+  const [disabled, setDisabled] = useState(false);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,6 +47,7 @@ export default function LoginPage() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    setDisabled(true);
     const { data, error } = await supabase.auth.signInWithOtp({
       email: values.email,
       options: {
@@ -54,6 +58,7 @@ export default function LoginPage() {
     });
     console.log("data", data);
     console.log("error", error);
+    setDisabled(false);
     if (error) {
       toast({
         title: "로그인 메일 발송에 실패했습니다.",
@@ -91,7 +96,8 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={disabled}>
+            {disabled && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             로그인
           </Button>
         </form>
