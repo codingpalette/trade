@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/wrapper/ThemeProvider";
 import MainLayoutWrapper from "@/components/wrapper/MainLayoutWrapper";
 import AuthProvider from "@/components/wrapper/AuthProvider";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -40,6 +41,7 @@ export default async function RootLayout({
         >
           <AuthProvider accessToken={session?.access_token}>
             <MainLayoutWrapper>{children}</MainLayoutWrapper>
+            <Toaster />
           </AuthProvider>
         </ThemeProvider>
       </body>
