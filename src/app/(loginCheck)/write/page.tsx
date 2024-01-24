@@ -18,17 +18,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
 import { imageUpload } from "@/actions/imageAction";
+import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  // email: z.string().email({
-  //   message: "이메일 형식이 아닙니다.",
-  // }),
-
   title: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "제목을 2자 이상 입력해 주세요.",
   }),
   content: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "내용을 2자 이상 입력해 주세요.",
   }),
   images: z.array(
     z.object({
@@ -40,6 +40,7 @@ const formSchema = z.object({
 
 export default function WritePage() {
   const supabase = createClientComponentClient();
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [fileUploadLoading, setFileUploadLoading] = useState(false);
 
@@ -90,7 +91,46 @@ export default function WritePage() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("22222");
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .insert([
+          {
+            title: values.title,
+            content: values.content,
+          },
+        ])
+        .select("id");
+
+      if (error) {
+        toast({
+          title: "상품 등록 실패",
+          description: "상품 등록에 실패했습니다.",
+        });
+        return;
+      }
+      // 상품 등록 후 이미지 업로드
+      if (data && data.length > 0) {
+        if (values.images.length > 0) {
+          const productId = data[0].id;
+          const images = values.images.map((data) => {
+            return {
+              product_id: productId,
+              cloudflare_id: data.cloudflare_id,
+              image_url: data.image_url,
+            };
+          });
+          await supabase.from("product_images").insert(images);
+        }
+      }
+      toast({
+        title: "상품 등록 성공",
+        description: "상품 등록에 성공했습니다.",
+      });
+      router.push("/");
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 
   return (
@@ -163,17 +203,39 @@ export default function WritePage() {
                   <FormControl>
                     <Input placeholder="제목을 입력해 주세요." {...field} />
                   </FormControl>
-                  {/* <FormDescription>
-                    This is your public display name.
-                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">로그인</Button>
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>내용</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="내용을 입력해 주세요."
+                      {...field}
+                      maxLength={200}
+                      rows={5}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    상품의 내용을 입력해 주세요.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-4">
+              <Button type="submit">저장</Button>
+              <Button type="button" variant="outline">
+                <Link href="/">취소</Link>
+              </Button>
+            </div>
           </form>
         </Form>
-        <h1>WritePage</h1>
       </div>
     </>
   );
