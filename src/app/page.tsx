@@ -1,8 +1,7 @@
 // "use client";
 
 // import supabase from "@/utils/supabase";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-// import { useEffect } from "react";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import {
   Form,
@@ -28,6 +27,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Database } from "@/type/database.types";
+import { cookies } from "next/headers";
+import { ImageOff } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -45,8 +47,13 @@ const formSchema = z.object({
   // }),
 });
 
-export default function Home() {
-  const supabase = createClientComponentClient();
+export default async function Home() {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const { data } = await supabase
+    .from("products")
+    .select(`*, product_images(*)`)
+    .order("id", { ascending: false });
+  // console.log("data", data);
 
   // async function load() {
   //   const { data } = await supabase.from("page").select("*");
@@ -96,7 +103,29 @@ export default function Home() {
         <Button>검색</Button>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <Card className="">
+        {data?.map((v, i) => (
+          <Card className="" key={i}>
+            <CardHeader>
+              <CardTitle>{v.title}</CardTitle>
+              <CardDescription>{v.content}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="relative aspect-video w-full">
+                {v.product_images.length > 0 && (
+                  <img
+                    src={`${v.product_images[0]?.image_url}/middle`}
+                    className="absolute left-0 top-0 h-full w-full object-cover"
+                  />
+                )}
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button>상세보기</Button>
+            </CardFooter>
+          </Card>
+        ))}
+
+        {/* <Card className="">
           <CardHeader>
             <CardTitle>Create project</CardTitle>
             <CardDescription>
@@ -114,7 +143,7 @@ export default function Home() {
           <CardFooter className="flex justify-end">
             <Button>상세보기</Button>
           </CardFooter>
-        </Card>
+        </Card> */}
       </div>
       {/* <div>2222</div>
 

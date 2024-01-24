@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Camera, Loader2, Menu } from "lucide-react";
+
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {
@@ -22,21 +23,8 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "제목을 2자 이상 입력해 주세요.",
-  }),
-  content: z.string().min(2, {
-    message: "내용을 2자 이상 입력해 주세요.",
-  }),
-  images: z.array(
-    z.object({
-      cloudflare_id: z.string(),
-      image_url: z.string(),
-    }),
-  ),
-});
+import { productsInsert } from "@/actions/products";
+import { productsFormSchema } from "@/types/formType";
 
 export default function WritePage() {
   const supabase = createClientComponentClient();
@@ -44,8 +32,8 @@ export default function WritePage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [fileUploadLoading, setFileUploadLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof productsFormSchema>>({
+    resolver: zodResolver(productsFormSchema),
     defaultValues: {
       title: "",
       content: "",
@@ -90,38 +78,15 @@ export default function WritePage() {
     }
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof productsFormSchema>) {
     try {
-      const { data, error } = await supabase
-        .from("products")
-        .insert([
-          {
-            title: values.title,
-            content: values.content,
-          },
-        ])
-        .select("id");
-
-      if (error) {
+      const res = await productsInsert(values);
+      if (!res) {
         toast({
           title: "상품 등록 실패",
           description: "상품 등록에 실패했습니다.",
         });
         return;
-      }
-      // 상품 등록 후 이미지 업로드
-      if (data && data.length > 0) {
-        if (values.images.length > 0) {
-          const productId = data[0].id;
-          const images = values.images.map((data) => {
-            return {
-              product_id: productId,
-              cloudflare_id: data.cloudflare_id,
-              image_url: data.image_url,
-            };
-          });
-          await supabase.from("product_images").insert(images);
-        }
       }
       toast({
         title: "상품 등록 성공",
