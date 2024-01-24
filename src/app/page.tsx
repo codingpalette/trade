@@ -106,8 +106,10 @@ export default async function Home() {
         {data?.map((v, i) => (
           <Card className="" key={i}>
             <CardHeader>
-              <CardTitle>{v.title}</CardTitle>
-              <CardDescription>{v.content}</CardDescription>
+              <CardTitle className="truncate">{v.title}</CardTitle>
+              <CardDescription className="line-clamp-3">
+                {v.content}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="relative aspect-video w-full">

@@ -166,7 +166,11 @@ export default function WritePage() {
                 <FormItem>
                   <FormLabel>제목</FormLabel>
                   <FormControl>
-                    <Input placeholder="제목을 입력해 주세요." {...field} />
+                    <Input
+                      placeholder="제목을 입력해 주세요."
+                      {...field}
+                      maxLength={30}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -182,7 +186,7 @@ export default function WritePage() {
                     <Textarea
                       placeholder="내용을 입력해 주세요."
                       {...field}
-                      maxLength={200}
+                      maxLength={500}
                       rows={5}
                     />
                   </FormControl>
