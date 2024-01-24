@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Camera, Menu } from "lucide-react";
+import { Camera, Loader2, Menu } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {
@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { imageUpload } from "@/actions/imageAction";
 
 const formSchema = z.object({
@@ -30,12 +30,18 @@ const formSchema = z.object({
   content: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  images: z.array(z.string()),
+  images: z.array(
+    z.object({
+      cloudflare_id: z.string(),
+      image_url: z.string(),
+    }),
+  ),
 });
 
 export default function WritePage() {
   const supabase = createClientComponentClient();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [fileUploadLoading, setFileUploadLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,14 +61,30 @@ export default function WritePage() {
     console.log("file", file.target.files);
 
     if (file.target.files && file.target.files.length > 0) {
+      setFileUploadLoading(true);
       const selectedFile: File = file.target.files[0];
       const formData = new FormData();
       formData.append("file", selectedFile);
       try {
         const res = await imageUpload(formData);
         console.log("res", res);
+        if (res) {
+          form.setValue("images", [
+            ...form.getValues("images"),
+            {
+              cloudflare_id: res.cloudflare_id,
+              image_url: res.image_url,
+            },
+          ]);
+          // input 파일 초기화
+          file.target.value = "";
+          setFileUploadLoading(false);
+        }
       } catch (error) {
         console.log("error", error);
+        // input 파일 초기화
+        file.target.value = "";
+        setFileUploadLoading(false);
       }
     }
   }
@@ -82,21 +104,55 @@ export default function WritePage() {
             <FormItem>
               <FormLabel>이미지</FormLabel>
               <FormControl>
-                <div>
-                  <Button variant="outline" size="icon" onClick={onClickCamera}>
-                    <Camera className="h-4 w-4" />
-                  </Button>
-                  <input
-                    type="file"
-                    ref={inputRef}
-                    accept="image/*"
-                    onChange={imageChange}
-                  />
+                <div className="flex flex-wrap gap-2">
+                  {form.watch("images")?.map((data, index) => {
+                    return (
+                      <Button
+                        key={index}
+                        className="relative h-20 w-20 overflow-hidden"
+                        size="icon"
+                        variant="outline"
+                        type="button"
+                      >
+                        <div>
+                          <img
+                            src={`${data.image_url}/thumbnail`}
+                            alt=""
+                            className="block h-20 w-20 object-cover"
+                          />
+                        </div>
+                      </Button>
+                    );
+                  })}
+                  {form.watch("images")?.length < 10 && (
+                    <>
+                      <Button
+                        className="h-20 w-20"
+                        variant="outline"
+                        size="icon"
+                        onClick={onClickCamera}
+                        disabled={fileUploadLoading}
+                      >
+                        {fileUploadLoading ? (
+                          <Loader2 className="h-8 w-8 animate-spin" />
+                        ) : (
+                          <Camera className="h-8 w-8" />
+                        )}
+                      </Button>
+                      <input
+                        hidden
+                        type="file"
+                        ref={inputRef}
+                        accept="image/*"
+                        onChange={imageChange}
+                      />
+                    </>
+                  )}
                 </div>
               </FormControl>
-              {/* <FormDescription>
-            This is your public display name.
-          </FormDescription> */}
+              <FormDescription>
+                최대 10장의 이미지를 업로드 할 수 있습니다.
+              </FormDescription>
             </FormItem>
             <FormField
               control={form.control}
