@@ -58,7 +58,7 @@ export default function Header({ session }: HeaderProps) {
 
   return (
     <>
-      <header className="flex w-full items-center justify-between border px-4 py-2 shadow-sm">
+      <header className="bg-card sticky left-0 top-0 z-50 flex w-full items-center justify-between border border-x-0 border-t-0 px-4 py-2">
         <Link href="/">Home</Link>
         {session ? (
           <>
