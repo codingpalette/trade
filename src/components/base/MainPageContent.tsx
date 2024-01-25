@@ -14,12 +14,20 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { motion } from "framer-motion";
+import { z } from "zod";
+import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface MainPageContentProps {
   data: any[] | null;
+  search: string | undefined;
 }
 
-export default function MainPageContent({ data }: MainPageContentProps) {
+export default function MainPageContent({
+  data,
+  search,
+}: MainPageContentProps) {
+  const router = useRouter();
   const supabase = createClientComponentClient();
   const PAGE_COUNT = 20;
   const [loadedDatas, setLoadedDatas] = useState(data);
@@ -28,6 +36,11 @@ export default function MainPageContent({ data }: MainPageContentProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isLast, setIsLast] = useState(false);
+
+  useEffect(() => {
+    setLoadedDatas(data);
+    setOffset(1);
+  }, [data]);
 
   const handleScroll = () => {
     if (containerRef.current && typeof window !== "undefined") {
@@ -71,21 +84,67 @@ export default function MainPageContent({ data }: MainPageContentProps) {
   const fetchTickets = async (offset: number) => {
     const from = offset * PAGE_COUNT;
     const to = from + PAGE_COUNT - 1;
-
-    const { data } = await supabase!
+    let query = supabase
       .from("products")
       .select(`*, product_images(*)`)
       .range(from, to)
       .order("id", { ascending: false });
 
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,content.like.%${search}%`);
+    }
+    const { data, error } = await query;
+
     return data;
   };
+
+  // 검증 스키마 정의
+  const searchSchema = z
+    .string()
+    .min(2, "검색어는 2글자 이상이어야 합니다.")
+    .refine(
+      (value) => value.trim().length > 0,
+      "공백만으로 구성된 검색어는 유효하지 않습니다.",
+    );
+  const [searchValue, setSeacrhValue] = useState("");
+
+  useEffect(() => {
+    if (search) {
+      setSeacrhValue(search);
+    } else {
+      setSeacrhValue("");
+    }
+  }, [search]);
+
+  function onClickSerach() {
+    try {
+      // Zod를 사용한 검증
+      searchSchema.parse(searchValue);
+      // 검증이 통과하면, 로직을 계속 진행
+      router.push(`/?search=${searchValue}`);
+    } catch (error: any) {
+      // 검증 실패 시, 에러 처리
+      console.log(error);
+      if (error instanceof z.ZodError) {
+        const errorMessages = error.errors[0].message;
+        toast({
+          title: "검색에 실패 했습니다.",
+          description: errorMessages,
+        });
+      }
+    }
+  }
 
   return (
     <>
       <div className="my-4 flex gap-4">
-        <Input placeholder="검색어를 입력해 주세요..." />
-        <Button>검색</Button>
+        <Input
+          placeholder="검색어를 입력해 주세요..."
+          value={searchValue}
+          onChange={(e) => setSeacrhValue(e.target.value)}
+          maxLength={30}
+        />
+        <Button onClick={onClickSerach}>검색</Button>
       </div>
       <div
         className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4"
