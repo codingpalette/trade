@@ -18,7 +18,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { loginFormSchema } from "@/types/formType";
+import { loginFormSchema } from "@/type/formType";
 
 export default function LoginPage() {
   const supabase = createClientComponentClient();

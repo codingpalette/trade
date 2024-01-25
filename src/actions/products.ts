@@ -6,7 +6,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import * as z from "zod";
-import { productsFormSchema } from "@/types/formType";
+import { productsFormSchema } from "@/type/formType";
 
 export async function productsInsert(
   values: z.infer<typeof productsFormSchema>,

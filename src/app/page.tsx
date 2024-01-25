@@ -30,6 +30,16 @@ import {
 import { Database } from "@/type/database.types";
 import { cookies } from "next/headers";
 import { ImageOff } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import MainPageContent from "@/components/base/MainPageContent";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -49,10 +59,19 @@ const formSchema = z.object({
 
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
+
   const { data } = await supabase
     .from("products")
     .select(`*, product_images(*)`)
-    .order("id", { ascending: false });
+    .order("id", { ascending: false })
+    .limit(20);
+
+  // const { count } = await supabase
+  //   .from("products")
+  //   .select("*", { count: "exact" });
+
+  // console.log("count", count);
+
   // console.log("data", data);
 
   // async function load() {
@@ -98,55 +117,8 @@ export default async function Home() {
 
   return (
     <>
-      <div className="my-4 flex gap-4">
-        <Input placeholder="검색어를 입력해 주세요..." />
-        <Button>검색</Button>
-      </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        {data?.map((v, i) => (
-          <Card className="" key={i}>
-            <CardHeader>
-              <CardTitle className="truncate">{v.title}</CardTitle>
-              <CardDescription className="line-clamp-3">
-                {v.content}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="relative aspect-video w-full">
-                {v.product_images.length > 0 && (
-                  <img
-                    src={`${v.product_images[0]?.image_url}/middle`}
-                    className="absolute left-0 top-0 h-full w-full object-cover"
-                  />
-                )}
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button>상세보기</Button>
-            </CardFooter>
-          </Card>
-        ))}
+      <MainPageContent data={data} />
 
-        {/* <Card className="">
-          <CardHeader>
-            <CardTitle>Create project</CardTitle>
-            <CardDescription>
-              Deploy your new project in one-click.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="relative aspect-video w-full">
-              <img
-                src="/images/image1.jpg"
-                className="absolute left-0 top-0 h-full w-full object-cover"
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button>상세보기</Button>
-          </CardFooter>
-        </Card> */}
-      </div>
       {/* <div>2222</div>
 
       <Form {...form}>

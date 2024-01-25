@@ -24,7 +24,7 @@ import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { productsInsert } from "@/actions/products";
-import { productsFormSchema } from "@/types/formType";
+import { productsFormSchema } from "@/type/formType";
 
 export default function WritePage() {
   const supabase = createClientComponentClient();
