@@ -29,3 +29,17 @@ export const loginFormSchema = z.object({
     message: "이메일 형식이 아닙니다.",
   }),
 });
+
+export const profileFormSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: "닉네임을 2글자 이상 입력해 주세요.",
+    })
+    .refine(
+      (value) => value.trim().length > 0,
+      "공백만으로 구성된 닉네임은 유효하지 않습니다.",
+    ),
+  email: z.string(),
+  user_id: z.string(),
+});

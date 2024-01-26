@@ -72,12 +72,14 @@ export default function Header({ session }: HeaderProps) {
                 <DropdownMenuLabel>{session.user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <span>프로필</span>
-                    <DropdownMenuShortcut>
-                      <User className="h-4 w-4" />
-                    </DropdownMenuShortcut>
-                  </DropdownMenuItem>
+                  <Link href={`/profile/${session.user.id}`}>
+                    <DropdownMenuItem>
+                      <span>프로필</span>
+                      <DropdownMenuShortcut>
+                        <User className="h-4 w-4" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Link>
                   <Link href="/write">
                     <DropdownMenuItem className="cursor-pointer">
                       <span>상품 등록</span>
