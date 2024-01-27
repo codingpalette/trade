@@ -25,7 +25,7 @@ export async function profileUpdate(values: z.infer<typeof profileFormSchema>) {
 
 // 유저 auth 삭제
 export async function authDelete(user_id: string) {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  // const supabase = createServerComponentClient<Database>({ cookies });
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE;
@@ -38,7 +38,6 @@ export async function authDelete(user_id: string) {
   const supbaseAdmin = createClient(supabaseUrl, key);
   const { data, error } = await supbaseAdmin.auth.admin.deleteUser(user_id);
   if (error) throw error;
-  console.log("ccc");
   // nextjs cache 삭제
   revalidatePath("*");
   return data;

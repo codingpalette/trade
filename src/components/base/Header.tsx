@@ -73,7 +73,7 @@ export default function Header({ session }: HeaderProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <Link href={`/profile/${session.user.id}`}>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
                       <span>프로필</span>
                       <DropdownMenuShortcut>
                         <User className="h-4 w-4" />

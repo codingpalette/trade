@@ -79,11 +79,11 @@ export default function ProfileForm({ data }: ProfileFormProps) {
 
   const [userEmailCheck, setUserEmailCheck] = useState(false);
   const [emailCheck, setEmailCheck] = useState("");
+  const [delLoading, setDelLoading] = useState(false);
   async function userDelEvent() {
-    console.log("2222");
+    setDelLoading(true);
     try {
       await authDelete(data.user_id);
-
       toast({
         title: "회원탈퇴에 성공했습니다.",
       });
@@ -95,6 +95,8 @@ export default function ProfileForm({ data }: ProfileFormProps) {
       toast({
         title: "회원탈퇴에 실패했습니다.",
       });
+    } finally {
+      setDelLoading(false);
     }
   }
 
@@ -184,9 +186,12 @@ export default function ProfileForm({ data }: ProfileFormProps) {
                   <DialogFooter>
                     <Button
                       type="button"
-                      disabled={!userEmailCheck}
+                      disabled={!userEmailCheck || delLoading}
                       onClick={userDelEvent}
                     >
+                      {delLoading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
                       회원탈퇴
                     </Button>
                   </DialogFooter>
