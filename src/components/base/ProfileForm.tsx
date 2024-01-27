@@ -11,15 +11,26 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { profileFormSchema } from "@/type/formType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Button } from "@/components/ui/button";
-import { profileUpdate } from "@/actions/profileAction";
+import { Label } from "@/components/ui/label";
+import { authDelete, profileUpdate } from "@/actions/profileAction";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ProfileFormProps {
   data: {
@@ -31,6 +42,7 @@ interface ProfileFormProps {
 }
 
 export default function ProfileForm({ data }: ProfileFormProps) {
+  const router = useRouter();
   const supabase = createClientComponentClient();
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -62,6 +74,27 @@ export default function ProfileForm({ data }: ProfileFormProps) {
       console.log(error);
     } finally {
       setUpdateLoading(false);
+    }
+  }
+
+  const [userEmailCheck, setUserEmailCheck] = useState(false);
+  const [emailCheck, setEmailCheck] = useState("");
+  async function userDelEvent() {
+    console.log("2222");
+    try {
+      await authDelete(data.user_id);
+
+      toast({
+        title: "회원탈퇴에 성공했습니다.",
+      });
+      const { error } = await supabase.auth.signOut();
+      // router.push("/");
+      // window.location.href = "/";
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "회원탈퇴에 실패했습니다.",
+      });
     }
   }
 
@@ -108,6 +141,57 @@ export default function ProfileForm({ data }: ProfileFormProps) {
                 )}
                 저장
               </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" type="button">
+                    회원탈퇴
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>회원탈퇴</DialogTitle>
+                    <DialogDescription>
+                      정말로 회원탈퇴를 하시겠습니까?
+                    </DialogDescription>
+                    <DialogDescription>
+                      회원탈퇴를 하시면 모든 정보가 삭제됩니다.
+                    </DialogDescription>
+                    <DialogDescription>
+                      본인 이메일을 입력해 주세요.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        이메일
+                      </Label>
+                      <Input
+                        id="check_email"
+                        // defaultValue=""
+                        className="col-span-3"
+                        value={emailCheck}
+                        onChange={(e) => {
+                          setEmailCheck(e.target.value);
+                          if (e.target.value === data.email) {
+                            setUserEmailCheck(true);
+                          } else {
+                            setUserEmailCheck(false);
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      disabled={!userEmailCheck}
+                      onClick={userDelEvent}
+                    >
+                      회원탈퇴
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </form>
         </Form>
