@@ -1,6 +1,8 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/type/database.types";
 import { cookies } from "next/headers";
+import NotItemContent from "@/components/base/NotItemContent";
+import ProductContent from "@/components/base/ProductContent";
 
 export default async function ProdictPage({
   params,
@@ -12,7 +14,7 @@ export default async function ProdictPage({
   // 아이템하나 가져오기
   const { data } = await supabase
     .from("products")
-    .select(`*, product_images(*)  `)
+    .select(`*, product_images(*), profiles(*)  `)
     .eq("id", params.id)
     .maybeSingle();
 
@@ -21,9 +23,9 @@ export default async function ProdictPage({
   console.log("params", params);
   console.log("data", data);
 
-  return (
-    <div>
-      <h1>Product Page</h1>
-    </div>
-  );
+  if (!data) {
+    return <NotItemContent />;
+  }
+
+  return <ProductContent data={data} />;
 }

@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import { z } from "zod";
 import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface MainPageContentProps {
   data: any[] | null;
@@ -184,7 +185,9 @@ export default function MainPageContent({
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button>상세보기</Button>
+                  <Link href={`/product/${v.id}`}>
+                    <Button>상세보기</Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </motion.div>
