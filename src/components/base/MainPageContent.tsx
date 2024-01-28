@@ -138,14 +138,16 @@ export default function MainPageContent({
 
   return (
     <>
-      <div className="my-4 flex gap-4">
-        <Input
-          placeholder="검색어를 입력해 주세요..."
-          value={searchValue}
-          onChange={(e) => setSeacrhValue(e.target.value)}
-          maxLength={30}
-        />
-        <Button onClick={onClickSerach}>검색</Button>
+      <div className="my-4">
+        <form action={onClickSerach} className="flex gap-4">
+          <Input
+            placeholder="검색어를 입력해 주세요..."
+            value={searchValue}
+            onChange={(e) => setSeacrhValue(e.target.value)}
+            maxLength={30}
+          />
+          <Button type="submit">검색</Button>
+        </form>
       </div>
       <div
         className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4"
