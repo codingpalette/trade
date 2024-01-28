@@ -37,7 +37,7 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    // console.log(values);
     setDisabled(true);
     const { data, error } = await supabase.auth.signInWithOtp({
       email: values.email,
@@ -47,8 +47,8 @@ export default function LoginPage() {
         emailRedirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_TO,
       },
     });
-    console.log("data", data);
-    console.log("error", error);
+    // console.log("data", data);
+    // console.log("error", error);
     setDisabled(false);
     if (error) {
       toast({
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
   return (
     // 화면 중앙에 오고 폭이 1/2
-    <div className="mx-auto mb-12 mt-12 w-full max-w-[780px] px-4 lg:mt-24">
+    <div className="mx-auto mb-12 mt-12 w-full max-w-[780px] lg:mt-24">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
