@@ -25,7 +25,7 @@ export default async function ProdictPage({
 
   if (!data) {
     return <NotItemContent />;
+  } else {
+    return <ProductContent data={data} />;
   }
-
-  return <ProductContent data={data} />;
 }

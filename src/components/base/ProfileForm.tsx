@@ -31,14 +31,10 @@ import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Database } from "@/type/database.types";
 
 interface ProfileFormProps {
-  data: {
-    user_id: string;
-    email: string;
-    created_at: string;
-    display_name: string;
-  };
+  data: Database["public"]["Tables"]["profiles"]["Row"];
 }
 
 export default function ProfileForm({ data }: ProfileFormProps) {
@@ -47,8 +43,8 @@ export default function ProfileForm({ data }: ProfileFormProps) {
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: data.display_name,
-      email: data?.email,
+      name: data?.display_name || "",
+      email: data?.email || "",
       user_id: data.user_id,
     },
   });
