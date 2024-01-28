@@ -20,8 +20,8 @@ export default async function ProdictPage({
 
   // const {data } = await supabase.from("products").select("*").eq("id", params.id);
 
-  console.log("params", params);
-  console.log("data", data);
+  // console.log("params", params);
+  // console.log("data", data);
 
   if (!data) {
     return <NotItemContent />;
