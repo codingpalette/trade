@@ -3,5 +3,5 @@ export default function ContentBox({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="mx-auto w-full  px-4">{children}</div>;
+  return <div className="mx-auto w-full max-w-screen-2xl px-4">{children}</div>;
 }

@@ -151,7 +151,7 @@ export default function MainPageContent({
         </form>
       </div>
       <div
-        className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-3"
+        className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4"
         ref={containerRef}
       >
         {loadedDatas?.map((v, index) => {
