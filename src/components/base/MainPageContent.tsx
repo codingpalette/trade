@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
@@ -150,7 +151,7 @@ export default function MainPageContent({
         </form>
       </div>
       <div
-        className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4"
+        className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-3"
         ref={containerRef}
       >
         {loadedDatas?.map((v, index) => {
