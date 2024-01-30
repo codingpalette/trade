@@ -1,7 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/type/database.types";
 import { cookies } from "next/headers";
-import MainPageContent from "@/components/base/MainPageContent";
+import MainPageContent from "@/app/(basicPage)/_components/MainPageContent";
 import { revalidatePath } from "next/cache";
 
 interface HomeProps {

@@ -2,7 +2,7 @@ import { Database } from "@/type/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-import ProfileForm from "@/components/base/ProfileForm";
+import ProfileForm from "@/app/(loginCheck)/_components/ProfileForm";
 
 export default async function ProfilePage() {
   const supabase = createServerComponentClient<Database>({ cookies });

@@ -2,7 +2,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/type/database.types";
 import { cookies } from "next/headers";
 import NotItemContent from "@/components/base/NotItemContent";
-import ProductContent from "@/components/base/ProductContent";
+import ProductContent from "@/app/(basicPage)/_components/ProductContent";
 
 export default async function ProdictPage({
   params,
