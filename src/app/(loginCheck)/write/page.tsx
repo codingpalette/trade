@@ -23,7 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { productsInsert } from "@/actions/products";
+import { productsInsert } from "@/actions/productAction";
 import { productsFormSchema } from "@/type/formType";
 
 export default function WritePage() {
