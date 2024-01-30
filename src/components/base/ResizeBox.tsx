@@ -62,20 +62,22 @@ export default function ResizeBox({ children, session }: ResizeBoxPros) {
         style={{ overflow: " visible" }}
       >
         {!isHide && (
-          <ResizablePanel
-            defaultSize={15}
-            maxSize={25}
-            minSize={10}
-            collapsible={true}
-            collapsedSize={5}
-            onResize={resizeEvent}
-            className="sticky left-0 top-0 h-dvh"
-            id="left-panel"
-          >
-            <SideBar isMobile={isMobile} />
-          </ResizablePanel>
+          <>
+            <ResizablePanel
+              defaultSize={15}
+              maxSize={25}
+              minSize={10}
+              collapsible={true}
+              collapsedSize={5}
+              onResize={resizeEvent}
+              className="sticky left-0 top-0 h-dvh"
+              id="left-panel"
+            >
+              <SideBar isMobile={isMobile} />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+          </>
         )}
-        <ResizableHandle withHandle />
         <ResizablePanel defaultSize={85} style={{ overflow: "visible" }}>
           <Header session={session} />
           <ContentBox>{children}</ContentBox>
