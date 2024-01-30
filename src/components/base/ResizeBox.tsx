@@ -43,10 +43,12 @@ export default function ResizeBox({ children, session }: ResizeBoxPros) {
   const [isMobile, setIsMobile] = useState(false);
 
   function resizeEvent(size: number) {
-    if (size === 5) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
+    if (!isHide) {
+      if (size === 5) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
     }
   }
 
@@ -67,13 +69,13 @@ export default function ResizeBox({ children, session }: ResizeBoxPros) {
         style={{ overflow: " visible" }}
       >
         <ResizablePanel
-          defaultSize={isHide ? 5 : 15}
+          defaultSize={15}
           maxSize={25}
           minSize={10}
           collapsible={true}
           collapsedSize={5}
           onResize={resizeEvent}
-          className="sticky left-0 top-0 h-dvh min-w-[50px]"
+          className={`sticky left-0 top-0 h-dvh min-w-[50px] ${isHide && "max-w-[50px]"}`}
           id="left-panel"
         >
           <SideBar isMobile={isMobile} />

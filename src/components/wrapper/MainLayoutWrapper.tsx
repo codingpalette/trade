@@ -1,4 +1,6 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import ContentBox from "@/components/base/ContentBox";
+import Header from "@/components/base/Header";
 
 import { cookies } from "next/headers";
 import ResizeBox from "@/components/base/ResizeBox";
@@ -16,7 +18,9 @@ export default async function MainLayoutWrapper({
 
   return (
     <>
-      <ResizeBox session={session}>{children}</ResizeBox>
+      <Header session={session} />
+      <ContentBox>{children}</ContentBox>
+      {/* <ResizeBox session={session}>{children}</ResizeBox> */}
     </>
   );
 }
