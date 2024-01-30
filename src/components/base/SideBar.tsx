@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import NavItem from "@/components/base/NavItem";
+import Link from "next/link";
 
 interface SideBarProps {
   isMobile: boolean;
@@ -48,9 +49,11 @@ export default function SideBar({ isMobile }: SideBarProps) {
     <>
       <div className="bg-card">
         <div className="border border-x-0 border-t-0 px-4 py-2 ">
-          <Button variant="ghost" className="w-full">
-            HOME
-          </Button>
+          <Link href="/">
+            <Button variant="ghost" className="w-full">
+              HOME
+            </Button>
+          </Link>
         </div>
         <nav className="flex flex-col items-center justify-center gap-2 px-2 py-4">
           {navItems.map((item, index) => (

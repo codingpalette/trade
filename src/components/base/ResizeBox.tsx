@@ -37,12 +37,8 @@ export default function ResizeBox({ children, session }: ResizeBoxPros) {
   const [isHide, setIsHide] = useState(false);
 
   useEffect(() => {
-    if (width < 1080) {
-      setIsHide(true);
-    } else {
-      setIsHide(false);
-    }
-  }, [width]);
+    console.log("isHide", isHide);
+  }, [isHide]);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -54,6 +50,15 @@ export default function ResizeBox({ children, session }: ResizeBoxPros) {
     }
   }
 
+  useEffect(() => {
+    if (width < 1080) {
+      setIsMobile(true);
+      setIsHide(true);
+    } else {
+      setIsHide(false);
+    }
+  }, [width]);
+
   return (
     <>
       <ResizablePanelGroup
@@ -61,23 +66,19 @@ export default function ResizeBox({ children, session }: ResizeBoxPros) {
         className="relative w-full"
         style={{ overflow: " visible" }}
       >
-        {!isHide && (
-          <>
-            <ResizablePanel
-              defaultSize={15}
-              maxSize={25}
-              minSize={10}
-              collapsible={true}
-              collapsedSize={5}
-              onResize={resizeEvent}
-              className="sticky left-0 top-0 h-dvh"
-              id="left-panel"
-            >
-              <SideBar isMobile={isMobile} />
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-          </>
-        )}
+        <ResizablePanel
+          defaultSize={isHide ? 5 : 15}
+          maxSize={25}
+          minSize={10}
+          collapsible={true}
+          collapsedSize={5}
+          onResize={resizeEvent}
+          className="sticky left-0 top-0 h-dvh min-w-[50px]"
+          id="left-panel"
+        >
+          <SideBar isMobile={isMobile} />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
         <ResizablePanel defaultSize={85} style={{ overflow: "visible" }}>
           <Header session={session} />
           <ContentBox>{children}</ContentBox>
