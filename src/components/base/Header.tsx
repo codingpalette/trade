@@ -4,11 +4,16 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
+  ArrowLeftFromLine,
+  ArrowLeftRight,
+  ArrowRightFromLine,
   LogOut,
   Menu,
   Monitor,
   Moon,
+  PackagePlus,
   ShoppingBasket,
+  ShoppingCart,
   Sun,
   User,
 } from "lucide-react";
@@ -84,7 +89,39 @@ export default function Header({ session }: HeaderProps) {
                     <DropdownMenuItem className="cursor-pointer">
                       <span>상품 등록</span>
                       <DropdownMenuShortcut>
-                        <ShoppingBasket className="h-4 w-4" />
+                        <PackagePlus className="h-4 w-4" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/write">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <span>내 상품</span>
+                      <DropdownMenuShortcut>
+                        <ShoppingCart className="h-4 w-4" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/write">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <span>내 교환신청</span>
+                      <DropdownMenuShortcut>
+                        <ArrowRightFromLine className="h-4 w-4" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/write">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <span>받은 교환 신청</span>
+                      <DropdownMenuShortcut>
+                        <ArrowLeftFromLine className="h-4 w-4" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/write">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <span>교환중</span>
+                      <DropdownMenuShortcut>
+                        <ArrowLeftRight className="h-4 w-4" />
                       </DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </Link>
