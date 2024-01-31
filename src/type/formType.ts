@@ -1,6 +1,7 @@
 import * as z from "zod";
 
 export const productsFormSchema = z.object({
+  id: z.number().nullable(),
   title: z
     .string()
     .min(2, {
@@ -19,8 +20,20 @@ export const productsFormSchema = z.object({
     }),
   images: z.array(
     z.object({
-      cloudflare_id: z.string(),
-      image_url: z.string(),
+      id: z.number().nullable(),
+      cloudflare_id: z.string().nullable(),
+      image_url: z.string().nullable(),
+    }),
+  ),
+  new_images: z.array(
+    z.object({
+      cloudflare_id: z.string().nullable(),
+      image_url: z.string().nullable(),
+    }),
+  ),
+  del_images: z.array(
+    z.object({
+      id: z.number(),
     }),
   ),
 });

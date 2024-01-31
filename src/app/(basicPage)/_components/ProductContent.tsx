@@ -3,6 +3,8 @@ import { Database } from "@/type/database.types";
 import Image from "next/image";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface ProductContentProps {
   data:
@@ -11,9 +13,10 @@ interface ProductContentProps {
         profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
       })
     | null;
+  userId: string | undefined;
 }
 
-export default function ProductContent({ data }: ProductContentProps) {
+export default function ProductContent({ data, userId }: ProductContentProps) {
   return (
     <>
       <div className="mx-auto my-4">
@@ -41,6 +44,16 @@ export default function ProductContent({ data }: ProductContentProps) {
             </ScrollArea>
           </>
         )}
+        <div className="mt-4 flex gap-4">
+          {userId && data?.profiles?.user_id !== userId && (
+            <Button>교환신청</Button>
+          )}
+          {data?.profiles?.user_id === userId && (
+            <Link href={`/write?id=${data?.id}`}>
+              <Button>수정</Button>
+            </Link>
+          )}
+        </div>
       </div>
     </>
   );

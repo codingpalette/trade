@@ -18,14 +18,13 @@ export default async function ProdictPage({
     .eq("id", params.id)
     .maybeSingle();
 
-  // const {data } = await supabase.from("products").select("*").eq("id", params.id);
+  const { data: userData } = await supabase.auth.getSession();
 
-  // console.log("params", params);
-  // console.log("data", data);
+  // const {data } = await supabase.from("products").select("*").eq("id", params.id);
 
   if (!data) {
     return <NotItemContent />;
   } else {
-    return <ProductContent data={data} />;
+    return <ProductContent data={data} userId={userData.session?.user.id} />;
   }
 }

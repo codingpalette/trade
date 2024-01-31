@@ -12,33 +12,78 @@ export async function productsInsert(
   values: z.infer<typeof productsFormSchema>,
 ) {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data, error } = await supabase
-    .from("products")
-    .insert([
-      {
-        title: values.title,
-        content: values.content,
-      },
-    ])
-    .select("id");
+  console.log("values", values);
 
-  if (error) {
-    return false;
+  // 상품 데이터 객체
+  const productData = {
+    title: values.title,
+    content: values.content,
+  };
+
+  // 상품 생성 또는 업데이트
+  let data;
+  let error;
+  if (values.id) {
+    // 상품 수정
+    const updateResponse = await supabase
+      .from("products")
+      .update(productData)
+      .eq("id", values.id);
+
+    data = updateResponse.data;
+    error = updateResponse.error;
+  } else {
+    // 상품 생성
+    const insertResponse = await supabase
+      .from("products")
+      .insert([productData])
+      .select("id");
+
+    data = insertResponse.data;
+    error = insertResponse.error;
   }
+
+  if (error) throw error;
+
+  // 상품 등록 후 이미지 삭제
+  if (
+    data &&
+    data.length > 0 &&
+    values.del_images &&
+    values.del_images.length > 0
+  ) {
+    const images = values.del_images.map((image) => ({
+      id: image.id,
+    }));
+    await supabase.from("product_images").delete().in("id", images);
+  }
+
   // 상품 등록 후 이미지 업로드
-  if (data && data.length > 0) {
-    if (values.images.length > 0) {
-      const productId = data[0].id;
-      const images = values.images.map((data) => {
-        return {
-          product_id: productId,
-          cloudflare_id: data.cloudflare_id,
-          image_url: data.image_url,
-        };
-      });
-      await supabase.from("product_images").insert(images);
-    }
+  if (
+    data &&
+    data.length > 0 &&
+    values.new_images &&
+    values.new_images.length > 0
+  ) {
+    const productId = values.id ? values.id : data[0].id;
+    const images = values.new_images.map((image) => ({
+      product_id: productId,
+      cloudflare_id: image.cloudflare_id,
+      image_url: image.image_url,
+    }));
+    await supabase.from("product_images").insert(images);
   }
+
+  // if (data && data.length > 0 && values.images && values.images.length > 0) {
+  //   const productId = values.id ? values.id : data[0].id;
+  //   const images = values.images.map((image) => ({
+  //     product_id: productId,
+  //     cloudflare_id: image.cloudflare_id,
+  //     image_url: image.image_url,
+  //   }));
+  //   await supabase.from("product_images").insert(images);
+  // }
+
   revalidatePath("/");
   return true;
 }
