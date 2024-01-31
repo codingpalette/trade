@@ -1,38 +1,32 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import ProductList from "@/components/base/ProductList";
+import { Database } from "@/type/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
-import { z } from "zod";
-import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import { Database } from "@/type/database.types";
-interface MainPageContentProps {
+import ProductList from "@/components/base/ProductList";
+
+interface MyItemsContentPorps {
   data:
     | (Database["public"]["Tables"]["products"]["Row"] & {
         product_images: Database["public"]["Tables"]["product_images"]["Row"][];
         profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
       })[]
     | null;
-  search: string | undefined;
+  user_id: any;
 }
 
-export default function MainPageContent({
-  data,
-  search,
-}: MainPageContentProps) {
+export default function MyItemsContent({ data, user_id }: MyItemsContentPorps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
   const PAGE_COUNT = 20;
-  const [loadedDatas, setLoadedDatas] = useState(data);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isLast, setIsLast] = useState(false);
+  const [loadedDatas, setLoadedDatas] = useState(data);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLoadedDatas(data);
@@ -85,77 +79,28 @@ export default function MainPageContent({
       .from("products")
       .select(`*, product_images(*)`)
       .range(from, to)
+      .eq("user_id", user_id)
       .order("id", { ascending: false });
 
-    if (search) {
-      query = query.or(`title.ilike.%${search}%,content.like.%${search}%`);
-    }
     const { data, error } = await query;
 
     return data;
   };
 
-  // 검증 스키마 정의
-  const searchSchema = z
-    .string()
-    .min(2, "검색어는 2글자 이상이어야 합니다.")
-    .refine(
-      (value) => value.trim().length > 0,
-      "공백만으로 구성된 검색어는 유효하지 않습니다.",
-    );
-  const [searchValue, setSeacrhValue] = useState("");
-
-  useEffect(() => {
-    if (search) {
-      setSeacrhValue(search);
-    } else {
-      setSeacrhValue("");
-    }
-  }, [search]);
-
-  function onClickSerach() {
-    try {
-      // Zod를 사용한 검증
-      searchSchema.parse(searchValue);
-      // 검증이 통과하면, 로직을 계속 진행
-      router.push(`/?search=${searchValue}`);
-    } catch (error: any) {
-      // 검증 실패 시, 에러 처리
-      console.log(error);
-      if (error instanceof z.ZodError) {
-        const errorMessages = error.errors[0].message;
-        toast({
-          title: "검색에 실패 했습니다.",
-          description: errorMessages,
-        });
-      }
-    }
-  }
-
   return (
     <>
       <div className="my-4">
-        <form action={onClickSerach} className="flex gap-4">
-          <Input
-            placeholder="검색어를 입력해 주세요..."
-            value={searchValue}
-            onChange={(e) => setSeacrhValue(e.target.value)}
-            maxLength={30}
+        <div
+          className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4"
+          ref={containerRef}
+        >
+          <ProductList
+            data={loadedDatas}
+            PAGE_COUNT={PAGE_COUNT}
+            offset={offset}
           />
-          <Button type="submit">검색</Button>
-        </form>
+        </div>
       </div>
-      <div
-        className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4"
-        ref={containerRef}
-      >
-        <ProductList
-          data={loadedDatas}
-          PAGE_COUNT={PAGE_COUNT}
-          offset={offset}
-        />
-      </div>
-      <div className="h-4"></div>
     </>
   );
 }
