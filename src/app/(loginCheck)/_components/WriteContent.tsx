@@ -58,8 +58,6 @@ export default function WriteContent({ data }: WriteContentProps) {
   }
 
   async function imageChange(file: React.ChangeEvent<HTMLInputElement>) {
-    console.log("file", file.target.files);
-
     if (file.target.files && file.target.files.length > 0) {
       setFileUploadLoading(true);
       const selectedFile: File = file.target.files[0];
@@ -67,7 +65,6 @@ export default function WriteContent({ data }: WriteContentProps) {
       formData.append("file", selectedFile);
       try {
         const res = await imageUpload(formData);
-        console.log("res", res);
         if (res) {
           form.setValue("images", [
             ...form.getValues("images"),
@@ -89,7 +86,6 @@ export default function WriteContent({ data }: WriteContentProps) {
           setFileUploadLoading(false);
         }
       } catch (error) {
-        console.log("error", error);
         // input 파일 초기화
         file.target.value = "";
         setFileUploadLoading(false);
@@ -119,11 +115,8 @@ export default function WriteContent({ data }: WriteContentProps) {
 
   const [submitLoading, setSubmitLoading] = useState(false);
   async function onSubmit(values: z.infer<typeof productsFormSchema>) {
-    console.log("submit", values);
-    // return;
     setSubmitLoading(true);
     try {
-      console.log("values", values);
       const res = await productsInsert(values);
       if (!res) {
         toast({
@@ -138,7 +131,10 @@ export default function WriteContent({ data }: WriteContentProps) {
       });
       router.push("/");
     } catch (error) {
-      console.log("error", error);
+      toast({
+        title: "상품 등록 실패",
+        description: "상품 등록에 실패했습니다.",
+      });
     } finally {
       setSubmitLoading(false);
     }

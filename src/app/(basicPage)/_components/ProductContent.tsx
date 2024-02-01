@@ -1,10 +1,12 @@
+"use client";
+
 import { Database } from "@/type/database.types";
-
 import Image from "next/image";
-
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useState } from "react";
+import TradeDialog from "@/app/(basicPage)/_components/TradeDialog";
 
 interface ProductContentProps {
   data:
@@ -46,7 +48,7 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
         )}
         <div className="mt-4 flex gap-4">
           {userId && data?.profiles?.user_id !== userId && (
-            <Button>교환신청</Button>
+            <TradeDialog userId={userId} />
           )}
           {data?.profiles?.user_id === userId && (
             <Link href={`/write?id=${data?.id}`}>
