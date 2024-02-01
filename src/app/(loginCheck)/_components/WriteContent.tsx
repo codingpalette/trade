@@ -119,6 +119,8 @@ export default function WriteContent({ data }: WriteContentProps) {
 
   const [submitLoading, setSubmitLoading] = useState(false);
   async function onSubmit(values: z.infer<typeof productsFormSchema>) {
+    console.log("submit", values);
+    // return;
     setSubmitLoading(true);
     try {
       console.log("values", values);
@@ -131,8 +133,8 @@ export default function WriteContent({ data }: WriteContentProps) {
         return;
       }
       toast({
-        title: "상품 등록 성공",
-        description: "상품 등록에 성공했습니다.",
+        title: "상품 저장 성공",
+        description: "상품 저장에 성공했습니다.",
       });
       router.push("/");
     } catch (error) {
@@ -255,7 +257,7 @@ export default function WriteContent({ data }: WriteContentProps) {
               )}
             />
             <div className="flex gap-4">
-              <Button type="submit">
+              <Button type="submit" disabled={submitLoading}>
                 {submitLoading && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
