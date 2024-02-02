@@ -98,11 +98,11 @@ export default function TradeDialog({ userId }: TradeDialogProps) {
               <TableBody>
                 {listData.map((data) => (
                   <TableRow key={data.id}>
-                    <TableCell>
-                      <Label>{data.title}</Label>
+                    <TableCell className="max-w-6 truncate">
+                      <Label className="">{data.title}</Label>
                     </TableCell>
-                    <TableCell>
-                      <Label>{data.title}</Label>
+                    <TableCell className="max-w-6 truncate">
+                      <Label className="">{data.content}</Label>
                     </TableCell>
                     <TableCell>
                       <Label>
