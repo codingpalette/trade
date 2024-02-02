@@ -23,7 +23,9 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
     <>
       <div className="mx-auto my-4">
         <h2 className="mb-4 text-2xl font-semibold">{data?.title}</h2>
-        <p className="mb-8 leading-relaxed">{data?.content}</p>
+        <p className="mb-8 whitespace-pre-wrap leading-relaxed">
+          {data?.content}
+        </p>
         {data && data.product_images.length > 0 && (
           <>
             <ScrollArea className="w-full whitespace-nowrap rounded-md border">
