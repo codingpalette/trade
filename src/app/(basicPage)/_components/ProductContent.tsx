@@ -50,7 +50,7 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
         )}
         <div className="mt-4 flex gap-4">
           {userId && data?.profiles?.user_id !== userId && (
-            <TradeDialog userId={userId} />
+            <TradeDialog userId={userId} targetItemId={data?.id} />
           )}
           {data?.profiles?.user_id === userId && (
             <Link href={`/write?id=${data?.id}`}>

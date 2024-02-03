@@ -1,6 +1,6 @@
 "use client";
 
-import { myItems } from "@/actions/tradeAction";
+import { myItems, tradeInsert } from "@/actions/tradeAction";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,7 +10,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -20,21 +19,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
 
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Database } from "@/type/database.types";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Loader2 } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface TradeDialogProps {
   userId: string | undefined;
+  targetItemId: number | undefined;
 }
 
-export default function TradeDialog({ userId }: TradeDialogProps) {
+export default function TradeDialog({
+  userId,
+  targetItemId,
+}: TradeDialogProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [selectItem, setSelectItem] = useState<number | null>(null);
+  const [tradeEventLoading, setTradeEventLoading] = useState(false);
 
   const [listData, setListData] = useState<
     (Database["public"]["Tables"]["products"]["Row"] & {
@@ -42,11 +62,10 @@ export default function TradeDialog({ userId }: TradeDialogProps) {
     })[]
   >([]);
 
-  async function onClickTrate() {
-    console.log("userId", userId);
+  async function onClickTrade() {
     try {
+      setSelectItem(null);
       const res = await myItems(userId);
-      console.log("res", res);
       if (res) {
         setListData(res);
         setIsOpen(true);
@@ -56,24 +75,36 @@ export default function TradeDialog({ userId }: TradeDialogProps) {
     }
   }
 
-  const payments = [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "489e1d42",
-      amount: 125,
-      status: "processing",
-      email: "example@gmail.com",
-    },
-  ];
+  function onClickAlert(id: number) {
+    setSelectItem(id);
+    setIsAlertOpen(true);
+  }
+
+  async function onClickTradeEvent(e: any) {
+    e.preventDefault();
+    setTradeEventLoading(true);
+    try {
+      if (selectItem && targetItemId) {
+        await tradeInsert(selectItem, targetItemId);
+        toast({
+          title: "교환신청 성공",
+          description: "교환신청이 완료되었습니다.",
+        });
+        router.push("/");
+      }
+    } catch (error: any) {
+      toast({
+        title: "교환신청 실패",
+        description: error.message,
+      });
+    } finally {
+      setTradeEventLoading(false);
+    }
+  }
 
   return (
     <>
-      <Button onClick={onClickTrate}>교환신청</Button>
+      <Button onClick={onClickTrade}>교환신청</Button>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
         {/* <DialogTrigger asChild>
           <Button>교환신청</Button>
@@ -119,7 +150,9 @@ export default function TradeDialog({ userId }: TradeDialogProps) {
                       </Label>
                     </TableCell>
                     <TableCell>
-                      <Button>교환신청</Button>
+                      <Button onClick={() => onClickAlert(data.id)}>
+                        교환신청
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -136,6 +169,32 @@ export default function TradeDialog({ userId }: TradeDialogProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <AlertDialog
+        open={isAlertOpen}
+        onOpenChange={() => setIsAlertOpen(false)}
+      >
+        {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>교환 신청을 하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>
+              교환 신청 후 상대방의 수락을 기다려 주세요.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>닫기</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onClickTradeEvent}
+              disabled={tradeEventLoading}
+            >
+              {tradeEventLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              교환 신청!
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

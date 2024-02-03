@@ -23,3 +23,60 @@ export async function myItems(id: string | undefined) {
   if (error) throw error;
   return data;
 }
+
+async function checkItemState(itemId: number, itemName: string) {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const { data: item, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", itemId)
+    .single();
+
+  if (error)
+    throw new Error(error.message || "알 수 없는 에러가 발생했습니다.");
+  if (item.state !== 0)
+    throw new Error(`${itemName}이(가) 이미 교환중이거나 교환완료 상태입니다.`);
+
+  return item;
+}
+
+async function updateItemState(itemId: number) {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const { error } = await supabase
+    .from("products")
+    .update({ state: 1 })
+    .eq("id", itemId);
+
+  if (error)
+    throw new Error(error.message || "상태 업데이트 중 에러가 발생했습니다.");
+}
+
+export async function tradeInsert(myItemId: number, targetItemId: number) {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  // 우선 상대방 아이템이 교환 가능한지 확인
+  const targetItem = await checkItemState(targetItemId, "상대방 아이템");
+  // 내 아이템이 교환 가능한지 확인
+  const myItem = await checkItemState(myItemId, "내 아이템");
+
+  // product_trades에 교환 요청 추가
+  const { data, error } = await supabase
+    .from("product_trades")
+    .insert([
+      {
+        req_product_id: targetItemId,
+        req_user_id: targetItem.user_id,
+        res_product_id: myItemId,
+        res_user_id: myItem.user_id,
+      },
+    ])
+    .single();
+
+  if (error)
+    throw new Error(error.message || "교환 요청 중 에러가 발생했습니다.");
+
+  // 아이템 상태 변경
+  await updateItemState(myItemId);
+  await updateItemState(targetItemId);
+
+  return data;
+}
