@@ -116,7 +116,7 @@ export default function TradeDialog({
               교환신청 상품을 선택해 주세요.
             </DialogDescription>
           </DialogHeader>
-          <div className="w-full overflow-auto rounded-md border">
+          <div className="max-h-[300px] w-full overflow-auto rounded-md border">
             <Table className="min-w-[500px]">
               <TableHeader>
                 <TableRow>
