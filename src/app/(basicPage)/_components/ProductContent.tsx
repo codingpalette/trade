@@ -21,9 +21,9 @@ interface ProductContentProps {
 export default function ProductContent({ data, userId }: ProductContentProps) {
   return (
     <>
-      <div className="mx-auto my-4">
+      <div className="mx-auto my-4 w-full">
         <h2 className="mb-4 text-2xl font-semibold">{data?.title}</h2>
-        <p className="mb-8 whitespace-pre-wrap leading-relaxed">
+        <p className="mb-8 whitespace-pre-wrap break-all leading-relaxed">
           {data?.content}
         </p>
         {data && data.product_images.length > 0 && (
