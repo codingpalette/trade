@@ -6,6 +6,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import TradeDialog from "@/app/(basicPage)/_components/TradeDialog";
 
 interface ProductContentProps {
@@ -22,7 +23,7 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
   return (
     <>
       <div className="mx-auto my-4 w-full">
-        <h2 className="mb-4 text-2xl font-semibold">{data?.title}</h2>
+        <h2 className="mb-4 break-all text-2xl font-semibold">{data?.title}</h2>
         <p className="mb-8 whitespace-pre-wrap break-all leading-relaxed">
           {data?.content}
         </p>
@@ -58,6 +59,17 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
             </Link>
           )}
         </div>
+        {!userId && (
+          <div className="mt-4">
+            <Alert>
+              {/* <Terminal className="h-4 w-4" /> */}
+              {/* <AlertTitle>Heads up!</AlertTitle> */}
+              <AlertDescription>
+                로기인한 사용자만 상품을 거래할 수 있습니다.
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
       </div>
     </>
   );
