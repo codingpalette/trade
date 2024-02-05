@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import WriteContent from "@/app/(loginCheck)/_components/WriteContent";
 import { redirect } from "next/navigation";
+export const dynamic = "force-dynamic";
 
 export default async function WritePage({
   searchParams,

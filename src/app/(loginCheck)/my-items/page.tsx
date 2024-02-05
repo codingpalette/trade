@@ -2,6 +2,7 @@ import { Database } from "@/type/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import MyItemsContent from "@/app/(loginCheck)/_components/MyItemsContent";
+export const dynamic = "force-dynamic";
 
 export default async function MyItems() {
   const supabase = createServerComponentClient<Database>({ cookies });

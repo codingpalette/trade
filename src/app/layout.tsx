@@ -8,6 +8,7 @@ import MainLayoutWrapper from "@/components/wrapper/MainLayoutWrapper";
 import AuthProvider from "@/components/wrapper/AuthProvider";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Create Next App",

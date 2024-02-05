@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { eq } from "lodash";
 import { cookies } from "next/headers";
 import InOutTradeContent from "@/app/(loginCheck)/_components/InOutTradeContent";
+export const dynamic = "force-dynamic";
 
 export default async function OutputTradePage() {
   const supabase = createServerComponentClient<Database>({ cookies });

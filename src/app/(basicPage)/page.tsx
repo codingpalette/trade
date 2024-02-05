@@ -3,6 +3,7 @@ import { Database } from "@/type/database.types";
 import { cookies } from "next/headers";
 import MainPageContent from "@/app/(basicPage)/_components/MainPageContent";
 import { revalidatePath } from "next/cache";
+export const dynamic = "force-dynamic";
 
 interface HomeProps {
   searchParams: {
