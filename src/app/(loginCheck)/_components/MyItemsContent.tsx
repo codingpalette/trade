@@ -11,7 +11,7 @@ import { ProductImageRow, ProductRow, ProfileRow } from "@/type/tableRow.types";
 interface MyItemsContentPorps {
   data:
     | (ProductRow & {
-        product_images: ProductImageRow;
+        product_images: ProductImageRow[];
         profiles: ProfileRow | null;
       })[]
     | null;

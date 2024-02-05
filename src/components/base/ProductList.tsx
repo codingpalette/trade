@@ -17,7 +17,7 @@ import { ProductImageRow, ProductRow, ProfileRow } from "@/type/tableRow.types";
 interface ProductListProps {
   data:
     | (ProductRow & {
-        product_images: ProductImageRow;
+        product_images: ProductImageRow[];
         profiles: ProfileRow | null;
       })[]
     | null;

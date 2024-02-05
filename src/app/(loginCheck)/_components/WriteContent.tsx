@@ -30,7 +30,7 @@ import { ProductImageRow, ProductRow } from "@/type/tableRow.types";
 interface WriteContentProps {
   data:
     | (ProductRow & {
-        product_images: ProductImageRow;
+        product_images: ProductImageRow[];
       })
     | null;
 }

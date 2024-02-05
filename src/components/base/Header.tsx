@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/select";
 import { useTheme } from "next-themes";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Image from "next/image";
 
 interface HeaderProps {
   session: any;
@@ -64,7 +65,10 @@ export default function Header({ session }: HeaderProps) {
   return (
     <>
       <header className="bg-card sticky left-0 top-0 z-50 flex w-full items-center justify-between border border-x-0 border-t-0 px-4 py-2">
-        <Link href="/">Home</Link>
+        <Link href="/">
+          Home
+          {/* <Image src="/images/216.png" alt={`home`} width={40} height={40} /> */}
+        </Link>
         {session ? (
           <>
             <DropdownMenu>

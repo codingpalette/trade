@@ -59,7 +59,7 @@ export default function TradeDialog({
 
   const [listData, setListData] = useState<
     (ProductRow & {
-      product_images: ProductImageRow;
+      product_images: ProductImageRow[];
     })[]
   >([]);
 
