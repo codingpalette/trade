@@ -10,11 +10,12 @@ import { z } from "zod";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Database } from "@/type/database.types";
+import { ProductImageRow, ProductRow, ProfileRow } from "@/type/tableRow.types";
 interface MainPageContentProps {
   data:
-    | (Database["public"]["Tables"]["products"]["Row"] & {
-        product_images: Database["public"]["Tables"]["product_images"]["Row"][];
-        profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
+    | (ProductRow & {
+        product_images: ProductImageRow;
+        profiles: ProfileRow | null;
       })[]
     | null;
   search: string | undefined;

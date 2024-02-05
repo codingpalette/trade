@@ -40,6 +40,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { ProductImageRow, ProductRow } from "@/type/tableRow.types";
 
 interface TradeDialogProps {
   userId: string | undefined;
@@ -57,8 +58,8 @@ export default function TradeDialog({
   const [tradeEventLoading, setTradeEventLoading] = useState(false);
 
   const [listData, setListData] = useState<
-    (Database["public"]["Tables"]["products"]["Row"] & {
-      product_images: Database["public"]["Tables"]["product_images"]["Row"][];
+    (ProductRow & {
+      product_images: ProductImageRow;
     })[]
   >([]);
 

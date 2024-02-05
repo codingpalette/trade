@@ -12,12 +12,13 @@ import {
 } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ProductImageRow, ProductRow, ProfileRow } from "@/type/tableRow.types";
 
 interface ProductListProps {
   data:
-    | (Database["public"]["Tables"]["products"]["Row"] & {
-        product_images: Database["public"]["Tables"]["product_images"]["Row"][];
-        profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
+    | (ProductRow & {
+        product_images: ProductImageRow;
+        profiles: ProfileRow | null;
       })[]
     | null;
 

@@ -69,6 +69,7 @@ export async function tradeInsert(myItemId: number, targetItemId: number) {
         res_user_id: myItem.user_id,
       },
     ])
+    .select("id")
     .single();
 
   if (error)

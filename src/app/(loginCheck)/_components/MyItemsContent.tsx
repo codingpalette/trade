@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import ProductList from "@/components/base/ProductList";
+import { ProductImageRow, ProductRow, ProfileRow } from "@/type/tableRow.types";
 
 interface MyItemsContentPorps {
   data:
-    | (Database["public"]["Tables"]["products"]["Row"] & {
-        product_images: Database["public"]["Tables"]["product_images"]["Row"][];
-        profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
+    | (ProductRow & {
+        product_images: ProductImageRow;
+        profiles: ProfileRow | null;
       })[]
     | null;
   user_id: any;

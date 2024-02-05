@@ -25,11 +25,12 @@ import { useRouter } from "next/navigation";
 import { productsInsert } from "@/actions/productAction";
 import { productsFormSchema } from "@/type/formType";
 import { Database } from "@/type/database.types";
+import { ProductImageRow, ProductRow } from "@/type/tableRow.types";
 
 interface WriteContentProps {
   data:
-    | (Database["public"]["Tables"]["products"]["Row"] & {
-        product_images: Database["public"]["Tables"]["product_images"]["Row"][];
+    | (ProductRow & {
+        product_images: ProductImageRow;
       })
     | null;
 }

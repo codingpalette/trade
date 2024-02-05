@@ -5,15 +5,15 @@ import Image from "next/image";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import TradeDialog from "@/app/(basicPage)/_components/TradeDialog";
+import { ProductImageRow, ProductRow, ProfileRow } from "@/type/tableRow.types";
 
 interface ProductContentProps {
   data:
-    | (Database["public"]["Tables"]["products"]["Row"] & {
-        product_images: Database["public"]["Tables"]["product_images"]["Row"][];
-        profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
+    | (ProductRow & {
+        product_images: ProductImageRow;
+        profiles: ProfileRow | null;
       })
     | null;
   userId: string | undefined;
@@ -55,10 +55,21 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
           )}
           {data?.profiles?.user_id === userId && (
             <Link href={`/write?id=${data?.id}`}>
-              <Button>수정</Button>
+              <Button disabled={data?.state !== 0}>수정</Button>
             </Link>
           )}
         </div>
+        {data?.profiles?.user_id === userId && data?.state !== 0 && (
+          <div className="mt-4">
+            <Alert>
+              {/* <Terminal className="h-4 w-4" /> */}
+              {/* <AlertTitle>Heads up!</AlertTitle> */}
+              <AlertDescription>
+                거래중인 상품은 수정할 수 없습니다.
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
         {!userId && (
           <div className="mt-4">
             <Alert>

@@ -31,10 +31,10 @@ import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Database } from "@/type/database.types";
+import { ProfileRow } from "@/type/tableRow.types";
 
 interface ProfileFormProps {
-  data: Database["public"]["Tables"]["profiles"]["Row"];
+  data: ProfileRow;
 }
 
 export default function ProfileForm({ data }: ProfileFormProps) {
