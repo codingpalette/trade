@@ -18,7 +18,8 @@ export async function myItems(id: string | undefined) {
     .from("products")
     .select(`*,  product_images(*)`)
     .eq("user_id", id)
-    .eq("state", 0);
+    .eq("state", 0)
+    .order("id", { ascending: false });
 
   if (error) throw error;
   return data;

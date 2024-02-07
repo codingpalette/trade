@@ -16,7 +16,8 @@ export default async function OutputTradePage() {
         `*, res_product:res_product_id(*, product_images(*)), req_product:req_product_id(*, product_images(*))
         `,
       )
-      .eq("res_user_id", data.session.user.id);
+      .eq("res_user_id", data.session.user.id)
+      .order("id", { ascending: false });
 
     // console.log("data", itemList);
     return <InOutTradeContent data={itemList} />;
