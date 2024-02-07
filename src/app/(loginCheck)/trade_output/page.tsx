@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import InOutTradeContent from "@/app/(loginCheck)/_components/InOutTradeContent";
 export const dynamic = "force-dynamic";
 
-export default async function OutputTradePage() {
+export default async function TradeOutputPage() {
   const supabase = createServerComponentClient<Database>({ cookies });
 
   const { data, error } = await supabase.auth.getSession();

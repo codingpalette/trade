@@ -114,7 +114,7 @@ export default function Header({ session }: HeaderProps) {
                       </DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/output_trade">
+                  <Link href="/trade_output">
                     <DropdownMenuItem className="cursor-pointer">
                       <span>내 교환신청</span>
                       <DropdownMenuShortcut>
@@ -122,7 +122,7 @@ export default function Header({ session }: HeaderProps) {
                       </DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/write">
+                  <Link href="/trade_input">
                     <DropdownMenuItem className="cursor-pointer">
                       <span>받은 교환 신청</span>
                       <DropdownMenuShortcut>
