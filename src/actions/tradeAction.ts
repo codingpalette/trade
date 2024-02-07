@@ -78,6 +78,9 @@ export async function tradeInsert(myItemId: number, targetItemId: number) {
   // 아이템 상태 변경
   await updateItemState(myItemId);
   await updateItemState(targetItemId);
+  revalidatePath("/");
+  revalidatePath("/my_items");
+  revalidatePath("/output_trade");
 
   return data;
 }

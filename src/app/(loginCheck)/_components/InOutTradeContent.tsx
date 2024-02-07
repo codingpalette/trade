@@ -44,8 +44,8 @@ export default function InOutTradeContent({ data }: InOutTradeContentProps) {
   }, [data]);
   return (
     <>
-      <div className="mt-4">
-        <Table>
+      <div className="mt-4 w-full overflow-auto">
+        <Table className="min-w-[500px]">
           <TableCaption>내 교환 신청목록</TableCaption>
           <TableHeader>
             <TableRow>
@@ -62,7 +62,7 @@ export default function InOutTradeContent({ data }: InOutTradeContentProps) {
                   <TableCell className="max-w-6 truncate">
                     {v.res_product.title}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="w-[40px]">
                     {v.res_product.product_images.length > 0 && (
                       <Avatar>
                         <Image
@@ -77,7 +77,7 @@ export default function InOutTradeContent({ data }: InOutTradeContentProps) {
                   <TableCell className="max-w-6 truncate">
                     {v.req_product.title}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="w-[40px]">
                     {v.req_product.product_images.length > 0 && (
                       <Avatar>
                         <Image
