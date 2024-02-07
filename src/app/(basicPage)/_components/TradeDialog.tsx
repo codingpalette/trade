@@ -22,7 +22,6 @@ import {
 
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Database } from "@/type/database.types";
 import Image from "next/image";
 import { Avatar } from "@/components/ui/avatar";
 
