@@ -44,11 +44,13 @@ import { ProductImageRow, ProductRow } from "@/type/tableRow.types";
 interface TradeDialogProps {
   userId: string | undefined;
   targetItemId: number | undefined;
+  state: number | null | undefined;
 }
 
 export default function TradeDialog({
   userId,
   targetItemId,
+  state,
 }: TradeDialogProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -90,7 +92,7 @@ export default function TradeDialog({
           title: "교환신청 성공",
           description: "교환신청이 완료되었습니다.",
         });
-        router.push("/");
+        router.push("/output_trade");
       }
     } catch (error: any) {
       toast({
@@ -104,7 +106,9 @@ export default function TradeDialog({
 
   return (
     <>
-      <Button onClick={onClickTrade}>교환신청</Button>
+      <Button onClick={onClickTrade} disabled={state !== 0}>
+        교환신청
+      </Button>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
         {/* <DialogTrigger asChild>
           <Button>교환신청</Button>

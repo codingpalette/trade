@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // 이제 ProductTradeRow를 확장하는 인터페이스를 정의할 수 있습니다.
 // interface ProductTradeRowWithDetails extends ProductTradeRow {
@@ -60,7 +62,11 @@ export default function InOutTradeContent({ data }: InOutTradeContentProps) {
               return (
                 <TableRow key={v.id}>
                   <TableCell className="max-w-6 truncate">
-                    {v.res_product.title}
+                    <Button variant="link">
+                      <Link href={`/product/${v.res_product.id}`}>
+                        {v.res_product.title}
+                      </Link>
+                    </Button>
                   </TableCell>
                   <TableCell className="w-[40px]">
                     {v.res_product.product_images.length > 0 && (
@@ -75,7 +81,11 @@ export default function InOutTradeContent({ data }: InOutTradeContentProps) {
                     )}
                   </TableCell>
                   <TableCell className="max-w-6 truncate">
-                    {v.req_product.title}
+                    <Button variant="link">
+                      <Link href={`/product/${v.req_product.id}`}>
+                        {v.req_product.title}
+                      </Link>
+                    </Button>
                   </TableCell>
                   <TableCell className="w-[40px]">
                     {v.req_product.product_images.length > 0 && (

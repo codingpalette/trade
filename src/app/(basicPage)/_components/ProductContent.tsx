@@ -51,7 +51,11 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
         )}
         <div className="mt-4 flex gap-4">
           {userId && data?.profiles?.user_id !== userId && (
-            <TradeDialog userId={userId} targetItemId={data?.id} />
+            <TradeDialog
+              userId={userId}
+              targetItemId={data?.id}
+              state={data?.state}
+            />
           )}
           {data?.profiles?.user_id === userId && (
             <Link href={`/write?id=${data?.id}`}>
@@ -59,7 +63,7 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
             </Link>
           )}
         </div>
-        {data?.profiles?.user_id === userId && data?.state !== 0 && (
+        {userId && data?.state !== 0 && (
           <div className="mt-4">
             <Alert>
               {/* <Terminal className="h-4 w-4" /> */}
