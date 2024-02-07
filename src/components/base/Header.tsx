@@ -7,6 +7,7 @@ import {
   ArrowLeftFromLine,
   ArrowLeftRight,
   ArrowRightFromLine,
+  Home,
   LogOut,
   Menu,
   Monitor,
@@ -66,8 +67,16 @@ export default function Header({ session }: HeaderProps) {
     <>
       <header className="bg-card sticky left-0 top-0 z-50 flex w-full items-center justify-between border border-x-0 border-t-0 px-4 py-2">
         <Link href="/">
-          Home
-          {/* <Image src="/images/216.png" alt={`home`} width={40} height={40} /> */}
+          <Button variant="ghost" size="icon">
+            <Home className="h-6 w-6" />
+          </Button>
+          {/* Home */}
+          {/* <Image
+            src="/images/apple-icon-180x180.png"
+            alt="/images/apple-icon-180x180.png"
+            width={40}
+            height={40}
+          /> */}
         </Link>
         {session ? (
           <>
