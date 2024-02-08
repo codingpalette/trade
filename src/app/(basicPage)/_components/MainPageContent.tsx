@@ -85,7 +85,7 @@ export default function MainPageContent({
     let query = supabase
       .from("products")
       .select(`*, product_images(*)`)
-      .eq(`state`, 0)
+      // .eq(`state`, 0)
       .range(from, to)
       .order("id", { ascending: false });
 

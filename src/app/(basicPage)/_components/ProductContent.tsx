@@ -80,7 +80,7 @@ export default function ProductContent({ data, userId }: ProductContentProps) {
               {/* <Terminal className="h-4 w-4" /> */}
               {/* <AlertTitle>Heads up!</AlertTitle> */}
               <AlertDescription>
-                로기인한 사용자만 상품을 거래할 수 있습니다.
+                로그인한 사용자만 상품을 거래할 수 있습니다.
               </AlertDescription>
             </Alert>
           </div>

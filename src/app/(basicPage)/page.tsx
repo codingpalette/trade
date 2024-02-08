@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: HomeProps) {
   let query = supabase
     .from("products")
     .select(`*, product_images(*), profiles(*)`)
-    .eq(`state`, 0)
+    // .eq(`state`, 0)
     .order("id", { ascending: false })
     .limit(20);
 
