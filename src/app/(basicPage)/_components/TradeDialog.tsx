@@ -92,7 +92,7 @@ export default function TradeDialog({
           title: "교환신청 성공",
           description: "교환신청이 완료되었습니다.",
         });
-        router.push("/output_trade");
+        router.push("/trade_output");
       }
     } catch (error: any) {
       toast({
