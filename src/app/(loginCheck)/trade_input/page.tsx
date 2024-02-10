@@ -18,7 +18,6 @@ export default async function TrageInputPage() {
       .eq("req_user_id", data.session.user.id)
       .order("id", { ascending: false });
 
-    console.log("itemList", itemList);
     return <InOutTradeContent data={itemList} mode="in" />;
   }
 }

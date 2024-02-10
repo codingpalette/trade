@@ -76,16 +76,13 @@ export default function InOutTradeContent({
   async function tradeClose() {
     if (selectId) {
       setEventLoading(true);
-      console.log("2222");
       try {
         const target = data?.find((v) => v.id === selectId);
-        console.log("target", target);
         const res = await tradeDelete(
           selectId,
           target?.req_product.id,
           target?.res_product.id,
         );
-        console.log("res", res);
       } catch (error: any) {
         console.log(error);
         toast({
@@ -166,7 +163,7 @@ export default function InOutTradeContent({
                       </Avatar>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-2">
                     {mode === "out" ? (
                       <>
                         <Button
@@ -178,8 +175,13 @@ export default function InOutTradeContent({
                       </>
                     ) : (
                       <>
-                        <Button variant="link">수락</Button>
-                        <Button variant="destructive">거절</Button>
+                        <Button>수락</Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => openTradeCloseModal(v.id)}
+                        >
+                          거절
+                        </Button>
                       </>
                     )}
                   </TableCell>
