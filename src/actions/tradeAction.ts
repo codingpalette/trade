@@ -81,7 +81,44 @@ export async function tradeInsert(myItemId: number, targetItemId: number) {
   await updateItemState(targetItemId);
   revalidatePath("/");
   revalidatePath("/my_items");
-  revalidatePath("/output_trade");
+  revalidatePath("/trade_output");
 
   return data;
+}
+
+export async function tradeDelete(id: number, reqId: number, resId: number) {
+  const supabase = createServerComponentClient<Database>({ cookies });
+
+  const { data, error } = await supabase
+    .from("product_trades")
+    .delete()
+    .eq("id", id)
+    .single();
+  if (error)
+    throw new Error(error.message || "교환 요청 삭제 중 에러가 발생했습니다.");
+
+  const { data: reqData, error: reqError } = await supabase
+    .from("products")
+    .update({ state: 0 })
+    .eq("id", reqId);
+  if (reqError) {
+    throw new Error(
+      reqError.message || "교환 요청 삭제 중 에러가 발생했습니다.",
+    );
+  }
+  const { data: resData, error: resError } = await supabase
+    .from("products")
+    .update({ state: 0 })
+    .eq("id", resId);
+  if (resError) {
+    throw new Error(
+      resError.message || "교환 요청 삭제 중 에러가 발생했습니다.",
+    );
+  }
+  revalidatePath("/");
+  revalidatePath("/my_items");
+  revalidatePath("/trade_output");
+  revalidatePath("/trade_input");
+
+  return true;
 }
