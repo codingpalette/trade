@@ -16,6 +16,7 @@ export default async function TradeOutputPage() {
         `,
       )
       .eq("res_user_id", data.session.user.id)
+      .eq("state", 0)
       .order("id", { ascending: false });
 
     // console.log("data", itemList);

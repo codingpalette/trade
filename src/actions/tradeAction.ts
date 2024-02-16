@@ -122,3 +122,45 @@ export async function tradeDelete(id: number, reqId: number, resId: number) {
 
   return true;
 }
+
+export async function tradeAcceptEvent(
+  id: number,
+  reqId: number,
+  resId: number,
+) {
+  const supabase = createServerComponentClient<Database>({ cookies });
+
+  const { data, error } = await supabase
+    .from("product_trades")
+    .update({ state: 1 })
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message || "교환 요청 수락 중 에러가 발생했습니다.");
+  }
+  const { data: reqData, error: reqError } = await supabase
+    .from("products")
+    .update({ state: 2 })
+    .eq("id", reqId);
+  if (reqError) {
+    throw new Error(
+      reqError.message || "교환 요청 수락 중 에러가 발생했습니다.",
+    );
+  }
+  const { data: resData, error: resError } = await supabase
+    .from("products")
+    .update({ state: 2 })
+    .eq("id", resId);
+  if (resError) {
+    throw new Error(
+      resError.message || "교환 요청 수락 중 에러가 발생했습니다.",
+    );
+  }
+  revalidatePath("/");
+  revalidatePath("/my_items");
+  revalidatePath("/trade_output");
+  revalidatePath("/trade_input");
+
+  return true;
+}

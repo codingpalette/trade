@@ -28,7 +28,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import { tradeDelete } from "@/actions/tradeAction";
+import { tradeDelete, tradeAcceptEvent } from "@/actions/tradeAction";
 import { toast } from "@/components/ui/use-toast";
 
 // 이제 ProductTradeRow를 확장하는 인터페이스를 정의할 수 있습니다.
@@ -55,34 +55,44 @@ export default function InOutTradeContent({
   data,
   mode,
 }: InOutTradeContentProps) {
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-  }, [data]);
-
-  const [TradeCloseModalActive, setTradeCloseModalActive] = useState(false);
+  const [tradeModalActive, setTradeModalActive] = useState(false);
+  const [tradeModalMode, setTradeModalMode] = useState<"accept" | "cancel">(
+    "accept",
+  );
   const [selectId, setSelectId] = useState<number | null>(null);
   const [evnetLoading, setEventLoading] = useState(false);
-  function openTradeCloseModal(id: number) {
-    console.log("id", id);
+  function openTradeModal(id: number, mode: "accept" | "cancel" = "accept") {
     setSelectId(id);
-    setTradeCloseModalActive(true);
+    setTradeModalMode(mode);
+    setTradeModalActive(true);
   }
-  function closeTradeCloseModal() {
+  function closeTradeModal() {
     setSelectId(null);
-    setTradeCloseModalActive(false);
+    setTradeModalActive(false);
   }
+
+  async function tradeEvent() {
+    if (tradeModalMode === "cancel") {
+      tradeClose();
+    } else {
+      tradeAccept();
+    }
+  }
+
   async function tradeClose() {
     if (selectId) {
       setEventLoading(true);
       try {
         const target = data?.find((v) => v.id === selectId);
-        const res = await tradeDelete(
+        await tradeDelete(
           selectId,
           target?.req_product.id,
           target?.res_product.id,
         );
+        toast({
+          title: "취소 성공",
+          description: "교환을 취소하였습니다.",
+        });
       } catch (error: any) {
         console.log(error);
         toast({
@@ -91,14 +101,37 @@ export default function InOutTradeContent({
         });
       } finally {
         setEventLoading(false);
-        closeTradeCloseModal();
+        closeTradeModal();
       }
-      // const res = await fetch(`/api/trade/${selectId}`, {
-      //   method: "DELETE",
-      // });
-      // if (res.ok) {
-      //   closeTradeCloseModal();
-      // }
+    }
+  }
+
+  async function tradeAccept() {
+    if (selectId) {
+      console.log("selectId", selectId);
+      setEventLoading(true);
+      try {
+        const target = data?.find((v) => v.id === selectId);
+        console.log("target", target);
+        await tradeAcceptEvent(
+          selectId,
+          target?.req_product.id,
+          target?.res_product.id,
+        );
+        toast({
+          title: "수락 성공",
+          description: "교환을 수락하였습니다.",
+        });
+      } catch (error: any) {
+        console.log(error);
+        toast({
+          title: "교환수락 실패",
+          description: error.message,
+        });
+      } finally {
+        setEventLoading(false);
+        closeTradeModal();
+      }
     }
   }
 
@@ -168,17 +201,19 @@ export default function InOutTradeContent({
                       <>
                         <Button
                           variant="destructive"
-                          onClick={() => openTradeCloseModal(v.id)}
+                          onClick={() => openTradeModal(v.id, "cancel")}
                         >
                           취소
                         </Button>
                       </>
                     ) : (
                       <>
-                        <Button>수락</Button>
+                        <Button onClick={() => openTradeModal(v.id, "accept")}>
+                          수락
+                        </Button>
                         <Button
                           variant="destructive"
-                          onClick={() => openTradeCloseModal(v.id)}
+                          onClick={() => openTradeModal(v.id, "cancel")}
                         >
                           거절
                         </Button>
@@ -192,26 +227,30 @@ export default function InOutTradeContent({
         </Table>
       </div>
 
-      <Dialog open={TradeCloseModalActive} onOpenChange={closeTradeCloseModal}>
+      <Dialog open={tradeModalActive} onOpenChange={closeTradeModal}>
         {/* <DialogTrigger asChild>
           <Button variant="outline">Edit Profile</Button>
         </DialogTrigger> */}
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>교환 취소</DialogTitle>
+            <DialogTitle>
+              {tradeModalMode === "accept" ? "교환 수락" : "교환 취소"}
+            </DialogTitle>
             <DialogDescription>
-              정말로 교환을 취소하시겠습니까?
+              {tradeModalMode === "accept"
+                ? "정말로 교환을 수락하시겠습니까?"
+                : "정말로 교환을 취소하시겠습니까?"}
             </DialogDescription>
           </DialogHeader>
           {/* <div className="grid gap-4 py-4"></div> */}
           <DialogFooter>
-            <Button onClick={tradeClose} disabled={evnetLoading}>
+            <Button onClick={tradeEvent} disabled={evnetLoading}>
               {evnetLoading && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              교환 취소
+              {tradeModalMode === "accept" ? "교환 수락" : "교환 취소"}
             </Button>
-            <Button variant="outline" onClick={closeTradeCloseModal}>
+            <Button variant="outline" onClick={closeTradeModal}>
               닫기
             </Button>
           </DialogFooter>
