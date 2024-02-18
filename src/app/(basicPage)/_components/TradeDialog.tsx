@@ -37,7 +37,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ProductImageRow, ProductRow } from "@/type/tableRow.types";
 
@@ -53,6 +53,7 @@ export default function TradeDialog({
   state,
 }: TradeDialogProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectItem, setSelectItem] = useState<number | null>(null);

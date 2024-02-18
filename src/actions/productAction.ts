@@ -75,3 +75,12 @@ export async function productsInsert(
   revalidatePath("/");
   return true;
 }
+
+export async function productsDelete(id: number) {
+  const supabase = createServerComponentClient<Database>({ cookies });
+
+  const { error } = await supabase.from("products").delete().eq("id", id);
+  if (error) throw error;
+  revalidatePath("/");
+  return true;
+}

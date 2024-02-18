@@ -130,7 +130,7 @@ export default function Header({ session }: HeaderProps) {
                       </DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/write">
+                  <Link href="/trade">
                     <DropdownMenuItem className="cursor-pointer">
                       <span>교환중</span>
                       <DropdownMenuShortcut>
